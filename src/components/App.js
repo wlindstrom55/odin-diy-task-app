@@ -1,5 +1,5 @@
 import React from 'react';
-import Overview from './components/Overview';
+import Overview from './Overview';
 
 //app will handle the input field with the logic of sending inputs to task array
 class App extends React.Component {

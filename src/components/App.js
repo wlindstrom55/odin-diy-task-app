@@ -5,7 +5,7 @@ import uniqid from "uniqid";
 //app will handle the input field with the logic of sending inputs to task array
 class App extends React.Component {
   constructor() {
-    super(); //not sure we need props at all here
+    super();
     this.state = {
       // testRightArray: [],
       // testLeftArray: [],
@@ -15,11 +15,13 @@ class App extends React.Component {
       task: {
         text: "",
         id: uniqid(),
+        editable: "1",
       },
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.removeItem = this.removeItem.bind(this);
+    this.editItem = this.editItem.bind(this);
   }
 
   //IMPORTANT: must make our component a 'controlled component' to deal with forms.
@@ -29,6 +31,7 @@ class App extends React.Component {
       task: {
         text: event.target.value,
         id: this.state.task.id, //does this change anything? should just set it to what it already was?
+        editable: "1",
       },
     }); //basically the state of task is stored
     //as state on the App component, instead of in the form (which doesn't work on React b/c)
@@ -44,6 +47,7 @@ class App extends React.Component {
       task: {
         text: "",
         id: uniqid(),
+        editable: "1",
       },
     });
   }
@@ -60,6 +64,52 @@ class App extends React.Component {
     this.setState({ array: newArray });
   }
 
+  editItem(event) {
+    // const targ = parseInt(event.target.id);
+    //const target = this.state.array[targ].task.editable;
+    //should flip the state of a task to whatever the opposite is...
+    // const one = "1";
+    // const two = "2";
+    //let opposite = "";
+
+    //should I have some way of saving the new value to state? or will that be a problem
+    //might do it, but is probably outside the scope of instructions.
+
+    let targ = this.state.array[parseInt(event.target.className)]
+      ? this.state.array[parseInt(event.target.className)].editable
+      : null;
+    if (targ === "1") {
+      targ = "2";
+    } else {
+      targ = "1";
+    }
+    // if (
+    //   this.state.array[this.state.array.indexOf({ id: event.target.id })]
+    //     .editable === "1"
+    // ) {
+    //   opposite = two;
+    // } else {
+    //   opposite = one;
+    // }
+
+    // this.state.array.map((obj) =>{
+    //     obj.id === event.target.id ?
+    // })
+
+    this.setState((prevState) => ({
+      array: prevState.array.map((obj) =>
+        obj.id === event.target.id
+          ? Object.assign(obj, { editable: targ })
+          : obj
+      ),
+    }));
+    // if (this.state.array[targ].task.editable === "true") {
+    //   this.setState({ array }); //will this work?
+    // } else {
+    //   target.setState({ task: { ...target.task, editable: "true" } });
+    // }
+  }
+
   render() {
     const { array, task } = this.state; //destructuring
     return (
@@ -74,7 +124,11 @@ class App extends React.Component {
           />
           <input type="submit" value="Submit" />
         </form>
-        <Overview array={array} itemRemove={this.removeItem} />
+        <Overview
+          array={array}
+          itemRemove={this.removeItem}
+          itemEdit={this.editItem}
+        />
       </div>
     );
   }

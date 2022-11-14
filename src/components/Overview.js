@@ -5,8 +5,6 @@ import React from "react";
 class Overview extends React.Component {
   // constructor(props) {
   //   super(props); //not sure if needed
-  //   this.state = { array: props.array };
-  //   //this.removeItem = this.removeItem.bind(this);
   // }
 
   render() {
@@ -14,12 +12,37 @@ class Overview extends React.Component {
       <div>
         <ul>
           {this.props.array.map((task, i) => {
+            const one = (
+              <div contentEditable={true}>
+                {"Task " + (i + 1) + " : " + task.text}
+              </div>
+            );
+            const two = <div>{"Task " + (i + 1) + " : " + task.text}</div>;
+            const three = (
+              <button
+                id={`${task.id}`}
+                className={`${i}`}
+                onClick={this.props.itemEdit}
+              >
+                Resubmit
+              </button>
+            );
+            const four = (
+              <button
+                id={`${task.id}`}
+                className={`${i}`}
+                onClick={this.props.itemEdit}
+              >
+                Edit
+              </button>
+            );
             return (
               <li key={task.id} id={task.id}>
-                {"Task " + (i + 1) + " : " + task.text + "    "}
+                {task.editable === "2" ? one : two}
                 <button id={`${i}`} onClick={this.props.itemRemove}>
                   Delete
                 </button>
+                {task.editable === "2" ? three : four}
               </li>
             );
           })}
@@ -28,5 +51,15 @@ class Overview extends React.Component {
     );
   }
 }
+
+/*
+<button id={`${i}`} onClick={this.props.editTask}>
+                  Edit
+                </button>
+
+                <div contentEditable={true}>
+                  {"Task " + (i + 1) + " : " + task.text + "    "}
+                </div>
+*/
 
 export default Overview;

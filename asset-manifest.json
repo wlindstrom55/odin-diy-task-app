@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/odin-diy-task-app/static/js/main.c5c1db2e.js",
+    "index.html": "/odin-diy-task-app/index.html",
+    "main.c5c1db2e.js.map": "/odin-diy-task-app/static/js/main.c5c1db2e.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.c5c1db2e.js"
+  ]
+}

@@ -4,7 +4,7 @@ import React from "react";
 
 class Overview extends React.Component {
   // constructor(props) {
-  //   super(props); //not sure if needed
+  //   super(props); //not needed. we pass all our props in App I'm guessing is why
   // }
 
   render() {
@@ -12,13 +12,15 @@ class Overview extends React.Component {
       <div>
         <ul>
           {this.props.array.map((task, i) => {
-            const one = (
+            const yesEditTask = (
               <div contentEditable={true}>
                 {"Task " + (i + 1) + " : " + task.text}
               </div>
             );
-            const two = <div>{"Task " + (i + 1) + " : " + task.text}</div>;
-            const three = (
+            const noEditTask = (
+              <div>{"Task " + (i + 1) + " : " + task.text}</div>
+            );
+            const yesEditButton = (
               <button
                 id={`${task.id}`}
                 className={`${i}`}
@@ -27,7 +29,7 @@ class Overview extends React.Component {
                 Resubmit
               </button>
             );
-            const four = (
+            const noEditButton = (
               <button
                 id={`${task.id}`}
                 className={`${i}`}
@@ -38,11 +40,11 @@ class Overview extends React.Component {
             );
             return (
               <li key={task.id} id={task.id}>
-                {task.editable === "2" ? one : two}
+                {task.editable === "2" ? yesEditTask : noEditTask}
                 <button id={`${i}`} onClick={this.props.itemRemove}>
                   Delete
                 </button>
-                {task.editable === "2" ? three : four}
+                {task.editable === "2" ? yesEditButton : noEditButton}
               </li>
             );
           })}
@@ -51,15 +53,5 @@ class Overview extends React.Component {
     );
   }
 }
-
-/*
-<button id={`${i}`} onClick={this.props.editTask}>
-                  Edit
-                </button>
-
-                <div contentEditable={true}>
-                  {"Task " + (i + 1) + " : " + task.text + "    "}
-                </div>
-*/
 
 export default Overview;

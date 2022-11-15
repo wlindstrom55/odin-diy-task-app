@@ -2,15 +2,14 @@ import React from "react";
 import Overview from "./Overview";
 import uniqid from "uniqid";
 
-//app will handle the input field with the logic of sending inputs to task array
+//App will handle the input field with the logic of sending inputs to task array
+//Note: "1" for the 'editable' attribute (the default as shown in the constructor below)
+//signifies the task as NOT EDITABLE and "2" signifies EDITABLE
+//Boolean values (which make more sense to use) don't render in React.
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      // testRightArray: [],
-      // testLeftArray: [],
-      // testArrayLength: "",
-      // testId: "",
       array: [],
       task: {
         text: "",
@@ -26,24 +25,25 @@ class App extends React.Component {
 
   //IMPORTANT: must make our component a 'controlled component' to deal with forms.
   //that requires an onChange event and a task={this.state.task} property (on the input).
+  //basically the state of task is stored as state on the App component,
+  //instead of in the form (which doesn't work on React b/c)
   handleChange(event) {
     this.setState({
       task: {
         text: event.target.value,
-        id: this.state.task.id, //does this change anything? should just set it to what it already was?
+        id: this.state.task.id,
         editable: "1",
       },
-    }); //basically the state of task is stored
-    //as state on the App component, instead of in the form (which doesn't work on React b/c)
+    });
   }
 
   handleSubmit(event) {
-    event.preventDefault(); //prevent default behavior (refresh)
+    event.preventDefault();
     this.setState({
       array: [...this.state.array, this.state.task], //non-mutating concat
     });
     this.setState({
-      //this resets the input after submit!
+      //resets the input after submit
       task: {
         text: "",
         id: uniqid(),
@@ -54,27 +54,23 @@ class App extends React.Component {
 
   removeItem(event) {
     //we want to remove from state array using event.target.id
-    const targ = parseInt(event.target.id) + 1; //if you try to concatenate event.target.id + 1, you are doing so as a string
+    const targ = parseInt(event.target.id) + 1;
+    //if you try to concatenate event.target.id + 1, you are doing so as a string
     //so you have to parseInt it.
     const leftArray = this.state.array.slice(0, event.target.id); //should take from 0 to target
     const rightArray = this.state.array.slice(targ); //should take everything to the right of index
-    // this.setState({ testRightArray: rightArray });
-    // this.setState({ testLeftArray: leftArray });
-    const newArray = [...leftArray, ...rightArray];
+    const newArray = [...leftArray, ...rightArray]; //non-mutating spread array concat
     this.setState({ array: newArray });
   }
 
   editItem(event) {
-    // const targ = parseInt(event.target.id);
-    //const target = this.state.array[targ].task.editable;
     //should flip the state of a task to whatever the opposite is...
-    // const one = "1";
-    // const two = "2";
-    //let opposite = "";
-
     //should I have some way of saving the new value to state? or will that be a problem
     //might do it, but is probably outside the scope of instructions.
 
+    //our edit button's className is the INDEX we need of our array
+    //so below: is there an object at that index of our array? if so, targ = that,
+    //otherwise return null
     let targ = this.state.array[parseInt(event.target.className)]
       ? this.state.array[parseInt(event.target.className)].editable
       : null;
@@ -83,19 +79,13 @@ class App extends React.Component {
     } else {
       targ = "1";
     }
-    // if (
-    //   this.state.array[this.state.array.indexOf({ id: event.target.id })]
-    //     .editable === "1"
-    // ) {
-    //   opposite = two;
-    // } else {
-    //   opposite = one;
-    // }
 
-    // this.state.array.map((obj) =>{
-    //     obj.id === event.target.id ?
-    // })
-
+    //prevState is the name given to the argument passed to setState callback function.
+    //It holds the value of state before the setState was triggered by React; since setState
+    //does batching, its important to know what the previous state was when you want to update
+    //the new state based on previous state.
+    //using functional set state like so, w/ callback, basically works like i +=1. More
+    //info here: https://stackoverflow.com/questions/54807454/what-is-prevstate-in-reactjs
     this.setState((prevState) => ({
       array: prevState.array.map((obj) =>
         obj.id === event.target.id
@@ -103,15 +93,10 @@ class App extends React.Component {
           : obj
       ),
     }));
-    // if (this.state.array[targ].task.editable === "true") {
-    //   this.setState({ array }); //will this work?
-    // } else {
-    //   target.setState({ task: { ...target.task, editable: "true" } });
-    // }
   }
 
   render() {
-    const { array, task } = this.state; //destructuring
+    const { array, task } = this.state; //destructuring state for readability
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
